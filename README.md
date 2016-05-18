@@ -5,7 +5,7 @@ datagen produces 2 complementary haplotype sequences of a given length as well a
 
 Instructions for use:
 
--Run as "python datagen.py n output" in terminal
+1. Run as "python datagen.py n output" in terminal
 
   -"n" = the number of SNPs
 
