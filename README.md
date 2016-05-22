@@ -10,19 +10,24 @@ datagen produces 2 complementary haplotype sequences of a given length as well a
 
 Instructions for use:
 
-1. Run as "python datagen.py n output" in terminal
+1. Run as "python datagen.py output" in terminal
 
-  -"n" = the number of SNPs
+  -"output" = name of output file for generated data (.txt will be concatenated automatically). If no argument passed, default will be "output".
 
-  -"output" = name of output file for generated data (.txt will be concatenated automatically"
+2. The program will prompt the user to enter the number of SNPs and error rate (between 0 and 1). 
 
-2. When completed, "output.txt" will contain the sequencing data and "output_haplotypes.txt" will contain the haplotype sequences. 
+3. When completed, "output.txt" will contain the sequencing data and "output_haplotypes.txt" will contain the haplotype sequences. 
 
-Number of reads per SNP is normally distributed with mean of 15, standard dev of 4, and minimum of 1. Length of each read is normally distributed with mean of 4, standard dev of 2, and minimum of 2. These values are somewhat arbitrary and can be changed within datagen.py. However, the minimum values are the least that is required for Hapster to successfully assemble the haplotype. 
+Number of reads per SNP is normally distributed with mean of 10, standard dev of 2, and minimum of 7. Length of each read is normally distributed with mean of 5, standard dev of 0.05, and minimum of 5. These values are somewhat arbitrary and can be changed within datagen.py. However, at least 1 read of length 2 at each position is required for Hapster to successfully assemble the haplotype. 
+
+# Misc
+
+errortest.py approximates the sequencing error rate from a read matrix given the correct haplotypes. For test purposes. 
 
 # TODO
-1. Update datagen to produce test data with variable sequencing errors
 
-2. Determine the error rate threshold for hapache
+1. Determine the error rate threshold for hapache
 
-3. Write a haplotype assembler for multiple chromosomes
+2. Compare hapache to some baseline. Considering HASH (Bansal et al., 2008) or HapCut (Bansal and Bafna, 2008).
+
+3. Write a haplotype assembler for multiple chromosomes and associated data generator
