@@ -15,8 +15,10 @@ for read in matrix:
         h1 += (read[pos+1])
         h0 += (str(1-int(read[pos+1])))
     pos += 1
-haplotypes = open(output, 'r+')
+haplotypes = open(output, 'w')
 haplotypes.write(h0 + '\n' + h1 + '\n')
+haplotypes.close()
+matrix.close()
 if (raw_input("Check results? y/n: ") == 'y'):
     correct = open(raw_input("Haplotype file: "), 'r').readline()[:-1]
     if correct == h0 or correct == h1:
