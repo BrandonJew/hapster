@@ -18,7 +18,7 @@ for read in matrix:
 haplotypes = open(output, 'r+')
 haplotypes.write(h0 + '\n' + h1 + '\n')
 if (raw_input("Check results? y/n: ") == 'y'):
-    correct = open(reads[:-4]+"_haplotypes.txt", 'r').readline()[:-1]
+    correct = open(raw_input("Haplotype file: "), 'r').readline()[:-1]
     if correct == h0 or correct == h1:
         print "CORRECT"
     else:
