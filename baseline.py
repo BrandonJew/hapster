@@ -9,12 +9,15 @@ for read in matrix:
     if (read[pos] == '-' or read[pos+1] == '-'):
         continue
     if (read[pos] == h0[pos]):
-        h0 += (read[pos+1])
-        h1 += (str(1-int(read[pos+1])))
+        while pos < len(read) - 2 and read[pos+1] != '-':
+            h0 += (read[pos+1])
+            h1 += (str(1-int(read[pos+1])))
+            pos+=1
     else:
-        h1 += (read[pos+1])
-        h0 += (str(1-int(read[pos+1])))
-    pos += 1
+        while pos < len(read) -2 and read[pos+1] != '-':
+            h1 += (read[pos+1])
+            h0 += (str(1-int(read[pos+1])))
+            pos+=1
 haplotypes = open(output, 'w')
 haplotypes.write(h0 + '\n' + h1 + '\n')
 haplotypes.close()
