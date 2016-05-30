@@ -8,9 +8,9 @@ output.write("snps,runs,baseline,hapster\n")
 for size in sizes:
 	output.write(str(size)+','+str(runs)+',')
 	basetot,hapstertot = 0,0
+	ts.generatedata(size,0)
 	for run in range(runs):
 		print "Starting size", str(size), "run #" + str(run)
-		ts.generatedata(size,0)
 		tstart = time.time()
 		ts.baseline()
 		basetot+=(time.time()-tstart)
@@ -26,7 +26,7 @@ testsize = 1000
 errorinc = 0.05
 errorrates = []
 errorrate = 0
-while errorrate < 1:
+while errorrate <= 1:
 	errorrates.append(round(errorrate,2))
 	errorrate+=errorinc
 output = open("correctnessdata.csv",'w')

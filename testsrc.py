@@ -61,41 +61,58 @@ def generatedata(n, errorrate):
 		start += 1
 	reads.close()
 	
-def baseline():
-	matrix = open("output.txt", 'r')
-	h0, h1, pos = "1", "0", 0
-	for read in matrix:
-		if (pos == (len(read) - 2)):
+def baseline(reads = "output.txt"):
+	matrix = open(reads, 'r')
+	h0, h1, pos, currline = "1", "0", 0, 0
+	n = len(matrix.readline())
+	matrix.seek(0)
+	while True:
+		matrix.seek((currline*n)+pos)
+		read = matrix.read(2)
+		if (pos == (n - 2)):
 		    break
-		if (read[pos] == '-' or read[pos+1] == '-'):
+		if (read[0] == '-' or read[1] == '-'):
+		    currline+=1
 		    continue
-		if (read[pos] == h0[pos]):
-		    while pos < len(read) - 2 and read[pos+1] != '-':
-		        h0 += (read[pos+1])
-		        h1 += (str(1-int(read[pos+1])))
+		if (read[0] == h0[pos]):
+		    hap = read[1]
+		    while pos < n - 2 and hap != '-':
+		        h0 += (hap)
+		        h1 += (str(1-int(hap)))
 		        pos+=1
+		        hap = matrix.read(1)
 		else:
-		    while pos < len(read) -2 and read[pos+1] != '-':
-		        h1 += (read[pos+1])
-		        h0 += (str(1-int(read[pos+1])))
+		    hap = read[1]
+		    while pos < n - 2 and hap != '-':
+		        h1 += (hap)
+		        h0 += (str(1-int(hap)))
 		        pos+=1
+		        hap = matrix.read(1)
+		currline+=1
 	matrix.close()
 	return h0
 
-def hapster():
-	matrix = open("output.txt", 'r')
+def hapster(reads = "output.txt"):
+	matrix = open(reads, 'r')
 	h0, h1, start, backtrack = array.array('c',"1"), array.array('c',"0"), 0, 0
 	opts = {'10': 0, '11': 0, '00' : 0, '01' : 0} #Opts contains possibilities for h0 at start
 	begin,first = True, True
+	currline = 0
+	n = len(matrix.readline())
+	matrix.seek(0)
 	while True:
 		while True: #If backtrack goes too far, goes forward until usable read is reached
-		    read = matrix.readline()
-		    if (begin and (start < len(read) - 1) and (read[start] == '-' or read[start+1] == '-')):
+		    #read = matrix.readline()
+		    matrix.seek((currline*n)+start)
+		    read = matrix.read(2)
+		    if (begin and (read[0] == '-' or read[1] == '-')):
+		        matrix.seek((n-2),1) #Goes forward one line
+		        currline+=1
 		        continue
 		    break
-		if (start >= (len(read) - 2)):
+		if (start >= (n - 2)):
 		    break
-		if (not begin) and (read[start] == '-' or read[start+1] == '-'):
+		if (not begin) and (read[0] == '-' or read[1] == '-'):
 		    best = max(opts.iteritems(), key=operator.itemgetter(1))[0] #Retrieves 2mer with highest hits
 		    h0[start] = best[0]
 		    h1[start] = str(1-int(best[0]))
@@ -103,18 +120,19 @@ def hapster():
 		    h1.append(str(1-int(best[1])))
 		    start += 1
 		    opts = {'10': 0, '11': 0, '00' : 0, '01' : 0}
-		    matrix.seek(max((matrix.tell())-(len(read)*backtrack), 0)) #Moving to new start position, so go back to earliest read that contain 2mers at this position
+		    #matrix.seek(max((matrix.tell())-(len(read)*backtrack), 0)) #Moving to new start position, so go back to earliest read that contain 2mers at this position
+		    currline = max((currline-backtrack), 0)
 		    begin,first = True, False
 		    continue
-		if (read[start] == h0[start]):
-		    opts[read[start:start+2]] += 1
+		if (read[0] == h0[start]):
+		    opts[read] += 1
 		else:
-		    opts[('0' + str(abs(int(read[start:start+2]) - 11)))[-2:]] += 1 #Inverts 2mer 
+		    opts[('0' + str(abs(int(read) - 11)))[-2:]] += 1 #Inverts 2mer 
 		if first: #Uses the number and length of reads at position 0 as the amount to backtrack when moving to a new start position
-			pos = start
-			while (read[pos] != '-'):
+			matrix.seek(currline*n)
+			while (matrix.read(1) != '-'):
 				backtrack += 1
-				pos += 1
+		currline+=1
 		begin = False
 	matrix.close()
 	return h0.tostring()

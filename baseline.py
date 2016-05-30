@@ -2,22 +2,32 @@
 reads = raw_input("Reads File Name: ")
 matrix = open(reads, 'r')
 output = raw_input("Output File Name: ")
-h0, h1, pos = "1", "0", 0
-for read in matrix:
-    if (pos == (len(read) - 2)):
+h0, h1, pos, currline = "1", "0", 0, 0
+n = len(matrix.readline())
+matrix.seek(0)
+while True:
+    matrix.seek((currline*n)+pos)
+    read = matrix.read(2)
+    if (pos == (n - 2)):
         break
-    if (read[pos] == '-' or read[pos+1] == '-'):
+    if (read[0] == '-' or read[1] == '-'):
+        currline+=1
         continue
-    if (read[pos] == h0[pos]):
-        while pos < len(read) - 2 and read[pos+1] != '-':
-            h0 += (read[pos+1])
-            h1 += (str(1-int(read[pos+1])))
+    if (read[0] == h0[pos]):
+        hap = read[1]
+        while pos < n - 2 and hap != '-':
+            h0 += (hap)
+            h1 += (str(1-int(hap)))
             pos+=1
+            hap = matrix.read(1)
     else:
-        while pos < len(read) -2 and read[pos+1] != '-':
-            h1 += (read[pos+1])
-            h0 += (str(1-int(read[pos+1])))
+        hap = read[1]
+        while pos < n - 2 and hap != '-':
+            h1 += (hap)
+            h0 += (str(1-int(hap)))
             pos+=1
+            hap = matrix.read(1)
+    currline+=1
 haplotypes = open(output, 'w')
 haplotypes.write(h0 + '\n' + h1 + '\n')
 haplotypes.close()
