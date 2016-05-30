@@ -1,4 +1,4 @@
-# Hapster
+# HAPSTR
 Assembles 2-chromosome haplotypes from short read sequecning data allowing for sequencing errors! This program employs a scoring based system that counts the number of possible 2mers from reads at each position and assembles the haplotypes using the most frequent possibility. As a result, this algorithm performs in linear time with on the order of 2\*k\*N operations, where k is the number of times a position is sequenced and N is the total number of SNPs. A fundamental assmuption is that the correct haplotype is sequenced the most frequently. After assembling the haplotype, Hapster will offer to check the output with the true haplotype sequences, if available.
 
 # Baseline
@@ -28,7 +28,7 @@ tester.py runs hapster against the baseline for a multitude of haplotype sizes a
 
 # TODO
 
-1. Rewrite hapster to use absolute file position rather than reading lines. Time complexity is not linear with large files (>25GB) due to the nature of python's readline function. 
+1. Rewrite hapster to use absolute file position rather than reading lines. Time complexity is not linear with large files (>25GB) due to the nature of python's readline function. (DONE, it's linear now!)
 
 2. Determine the error rate threshold for hapache (Done, it's roughly 10%)
 
